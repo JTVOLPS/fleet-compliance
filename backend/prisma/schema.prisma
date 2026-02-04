@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String   @id @default(uuid())
+  email                 String   @unique
+  password              String
+  companyName           String   @map("company_name")
+  phone                 String?
+  defaultReminderDays   Int[]    @default([30, 14, 3]) @map("default_reminder_days")
+  testingSchedule       TestingSchedule @default(SEMI_ANNUAL) @map("testing_schedule")
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+  trucks                Truck[]
+
+  @@map("users")
+}
+
+model Truck {
+  id            String      @id @default(uuid())
+  userId        String      @map("user_id")
+  unitNumber    String      @map("unit_number")
+  vin           String
+  licensePlate  String      @map("license_plate")
+  engineYear    Int         @map("engine_year")
+  fuelType      FuelType    @map("fuel_type")
+  fleetTag      String?     @map("fleet_tag")
+  status        TruckStatus @default(COMPLIANT)
+  needsRetest   Boolean     @default(false) @map("needs_retest")
+  nextDueDate   DateTime?   @map("next_due_date")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  testRecords   TestRecord[]
+  reminders     Reminder[]
+
+  @@map("trucks")
+}
+
+model TestRecord {
+  id          String     @id @default(uuid())
+  truckId     String     @map("truck_id")
+  testDate    DateTime   @map("test_date")
+  testResult  TestResult @map("test_result")
+  nextDueDate DateTime   @map("next_due_date")
+  testerName  String     @map("tester_name")
+  notes       String?
+  createdAt   DateTime   @default(now()) @map("created_at")
+
+  truck       Truck      @relation(fields: [truckId], references: [id], onDelete: Cascade)
+
+  @@map("test_records")
+}
+
+model Reminder {
+  id            String       @id @default(uuid())
+  truckId       String       @map("truck_id")
+  reminderDate  DateTime     @map("reminder_date")
+  reminderType  ReminderType @map("reminder_type")
+  sent          Boolean      @default(false)
+  sentAt        DateTime?    @map("sent_at")
+  createdAt     DateTime     @default(now()) @map("created_at")
+
+  truck         Truck        @relation(fields: [truckId], references: [id], onDelete: Cascade)
+
+  @@map("reminders")
+}
+
+enum FuelType {
+  DIESEL
+  ALT_FUEL
+}
+
+enum TruckStatus {
+  COMPLIANT
+  DUE_SOON
+  OVERDUE
+}
+
+enum TestResult {
+  PASS
+  FAIL
+}
+
+enum ReminderType {
+  EMAIL
+  SMS
+}
+
+enum TestingSchedule {
+  SEMI_ANNUAL
+  QUARTERLY
+}

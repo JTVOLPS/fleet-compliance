@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-padres-gold text-padres-brown font-semibold py-2 px-4 rounded-lg hover:bg-yellow-400 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-padres-gold focus:ring-offset-2;
+  }
+
+  .btn-secondary {
+    @apply bg-padres-brown text-white font-semibold py-2 px-4 rounded-lg hover:bg-opacity-90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-padres-brown focus:ring-offset-2;
+  }
+
+  .btn-outline {
+    @apply border-2 border-padres-brown text-padres-brown font-semibold py-2 px-4 rounded-lg hover:bg-padres-brown hover:text-white transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-padres-brown focus:ring-offset-2;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-padres-gold focus:border-transparent transition-all duration-200;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6;
+  }
+
+  .status-badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .status-compliant {
+    @apply status-badge bg-green-100 text-green-800;
+  }
+
+  .status-due-soon {
+    @apply status-badge bg-yellow-100 text-yellow-800;
+  }
+
+  .status-overdue {
+    @apply status-badge bg-red-100 text-red-800;
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-navy-800 hover:text-white rounded-lg transition-colors duration-200;
+  }
+
+  .sidebar-link-active {
+    @apply bg-navy-800 text-padres-gold;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
